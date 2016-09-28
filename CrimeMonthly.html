@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>2015 Crime </title>
+<script src="http://cdn.jquerytools.org/1.2.7/full/jquery.tools.min.js"></script>
+<style type="text/css">
+body {
+font-family: Helvetica;
+font-size: 16px;
+}
+h1 {
+font-size: 22px;
+}
+.bars {
+background-color: yellow;
+height: 25px;
+margin: 10px 0 0 0;
+-webkit-transition:width 1s ease-in;
+-moz-transition:width 1s ease-in;
+-o-transition:width 1s ease-in;
+transition:width 1s ease-in;
+}
+#bar0 {
+position: relative;
+}
+#bar1 {
+position: relative;
+}
+#bar2 {
+position: relative;
+}
+#bar3 {
+position: relative;
+}
+#bar4 {
+position: relative;
+}
+#bar5 {
+position: relative;
+}
+#bar6 {
+position: relative;
+}
+#bar7 {
+position: relative;
+}
+p {
+margin: 0;
+}
+.number {
+color: black;
+text-align: right;
+padding: 3px;
+font-size: 12px; 
+}
+#cat {
+padding-top: 5px;
+}
+#main
+{
+border-top: 1px solid black;
+border-bottom: 1px solid black;
+overflow: auto;
+padding: 10px;
+margin-top: 10px;
+}
+.tooltip {
+    
+    display:none;
+    background: beige;
+    font-size:14px;
+    height:25px;
+    border-radius: 5px;
+    padding-top: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 0px;
+    color: black;
+    border: 1px solid black;  
+  }
+</style>
+</head>
+<body>
+<h1>2015 Crime</h1>
+<!-- for for changing measures. Must match items in var measures below -->
+<form name="form1">
+<select name="sel" onChange="selMeasure()">
+  <option value="1">January</option>
+  <option value="2">February</option>  
+  <option value="3">March</option>  
+  <option value="4">April</option>
+  <option value="5">May</option>    
+  <option value="6">June</option> 
+  <option value="7">July</option>   
+  <option value="8">August</option>  
+  <option value="9">September</option>  
+  <option value="10">October</option>
+  <option value="11">November</option> 
+  <option value="12">December</option>     
+  
+</select>
+</form>
+<div id="main">
+<div id="cat"></div>
+<div id="bar0" class="bars"><p id="bartext0" class="number"></p>
+</div>
+<div id="name0"></div>
+<div id="bar1" class="bars"><p id="bartext1" class="number"></p>
+</div>
+<div id="name1"></div>
+<div id="bar2" class="bars"><p id="bartext2" class="number"></p>
+</div>
+<div id="name2"></div>
+<div id="bar3" class="bars"><p id="bartext3" class="number"></p>
+</div>
+<div id="name3"></div>
+<div id="bar4" class="bars"><p id="bartext4" class="number"></p>
+</div>
+<div id="name4"></div>
+<div id="bar5" class="bars"><p id="bartext5" class="number"></p>
+</div>
+<div id="name5"></div>
+<div id="bar6" class="bars"><p id="bartext6" class="number"></p>
+</div>
+<div id="name6"></div>
+</div>
+
+
+
+
+<script>
+//object to hold data
+var cities = [
+{name: "Theft", January: 1939, February: 87, March: 2070, April: 2086, May: 1960, June: 2028, July: 2216, August: 2094, September: 1949, October: 1927, Novermber: 383, December: 147, tip:"TESTING"},
+{name: "Auto Theft", January: 315,February: 335, March: 343, April: 260, May: 284, June: 296, July: 332, August: 325, September: 273, October: 279, November: 294, December: 49, tip: "near Dallas"},
+{name: "DWI's", January: 468,February: 441, March: 418, April: 383, May: 377, June: 401, July: 397, August: 459, September: 446, October: 449, November: 431, December: 72, tip: "TX Tech"},
+{name: "Public Intoxication", January: 190, February: 180, March: 269, April: 222, May: 228, June: 190, July: 219, August: 215, September: 234, October: 232, November: 182, December: 35, tip: "TX Tech"},
+{name: "Assault", January: 969, February: 926, March: 1064, April: 993, May: 1145, June: 1115, July: 1123, August: 1129, September: 1054, October: 954, November: 912, December: 173, tip: "TX Tech"},
+{name: "Sexual Assault", January: 32, February: 34, March: 42, April: 37, May: 42, June: 40, July: 35, August: 36, September: 35, October: 52, November: 40, December: 6, tip: "TX Tech"},
+{name: "Robbery", January: 49, February: 50, March: 68, April: 38, May: 61, June: 51, July: 60, August: 64, September: 64, October: 42, November: 49, December: 8, tip: "TX Tech"}
+];
+//array to hold names of different measures. Must match values in form
+var measures = Object.keys(cities[0]);
+data = [];     
+function writeData(x) {
+    for (var i = 0; i<cities.length; i++) {
+      data = data.concat(eval("cities[i]." + measures[x]));
+      var measMax = Math.max.apply(Math,data);
+    }
+ 
+    for (var i = 0; i<cities.length; i++) {
+      document.getElementById("name" + (i)).innerHTML= eval("cities[i]." + measures[0]);
+      document.getElementById("bartext" + (i)).innerHTML= eval("cities[i]." + measures[x]);
+      var cityMeas = eval("cities[i]." + measures[x]);
+      document.getElementById("bar" + (i)).style.width = ((cityMeas/measMax)*100) + "%";
+      document.getElementById("bar" + (i)).title= eval("cities[i]." + measures[4]); 
+    }
+    //city and tip do not need to change for each measure. 
+   
+    // this area inserts the Category as a heading 
+    
+    document.getElementById("cat").innerHTML = "<strong>" + measures[x] + "</strong>";
+};
+writeData(1); //writes data in initial state before form submitted
+function selMeasure() { // function that writes the data based on the dropdown selection
+var m = document.form1.sel.value;
+writeData(m); 
+};
+// JQuery function for tool tip
+$( document ).ready(function() {
+   $("[title]").tooltip();
+    });
+</script>
+</body>
+</html>
